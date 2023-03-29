@@ -1,0 +1,35 @@
+Added Component: Designator=R21(RESISTOR-1206)
+Add component (AddParameter): Name = "Mounted"; Value = "Yes"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package / Case"; Value = "Metric 3216, EIA 1206"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Precision"; Value = "1%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 1"; Value = "Digi-Key"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 2"; Value = "Digi-Key"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 3"; Value = "Digi-Key"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 4"; Value = "Digi-Key"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 1"; Value = "CSR1206FT10L0CT-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 2"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 3"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 4"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "10mR"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Watt"; Value = "0.5W"; VariantName = "[No Variations]"
+Added Component: Designator=U5(SOT-23-8)
+Add component (AddParameter): Name = "Mounted"; Value = "Yes"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package / Case"; Value = "SOT-23-8"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 1"; Value = "Digi-Key"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 1"; Value = "296-23770-1-ND"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=U5-3
+Added Pin To Net: NetName=+3.3 Pin=U5-4
+Added Pin To Net: NetName=SCL Pin=U5-5
+Added Pin To Net: NetName=SDA Pin=U5-6
+Added Pin To Net: NetName=GND Pin=U5-7
+Added Pin To Net: NetName=GND Pin=U5-8
+Added Pin To Net: NetName=Shunt+ Pin=P4-1
+Added Pin To Net: NetName=Shunt+ Pin=R21-1
+Added Pin To Net: NetName=Shunt+ Pin=U5-1
+Added Net: Name=Shunt+
+Added Pin To Net: NetName=Shunt- Pin=Q1-2
+Added Pin To Net: NetName=Shunt- Pin=R21-2
+Added Pin To Net: NetName=Shunt- Pin=U5-2
+Added Net: Name=Shunt-
+Added Member To Class: ClassName=main Member=Component R21 SMT resistor
+Added Member To Class: ClassName=main Member=Component U5 INA219AIDCNR
