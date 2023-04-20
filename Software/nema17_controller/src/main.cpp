@@ -21,7 +21,7 @@
 #define SDA_PIN 0
 #define SCL_PIN 1
 
-// Current sensor INA219AIDCNR
+// Current sensor INA219AIDCNR. We use 0.01 Ohm shunt resistor but in the lib is 0.1 Ohm
 Adafruit_INA219 ina219;
 #define CURRENT_SENSOR_ADDR 0x40
 
