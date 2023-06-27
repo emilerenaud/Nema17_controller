@@ -68,11 +68,43 @@ void processSerialCommands() {
         String commandName = command.substring(0, colonIndex);
         String commandValue = command.substring(colonIndex + 1);
         // decode command
-        if (commandName == "moveTo") {
+        if (commandName == "moveSteps") {
           int value = commandValue.toInt();
-          Serial.println("Moving to " + String(value));
+          Serial.println("Moving Steps " + String(value));
           controller.moveStep(value);
           // do something with value
+        }
+        else if(commandName == "moveAngle")
+        {
+          int value = commandValue.toInt();
+          Serial.println("Moving Angle " + String(value));
+          controller.moveAngle(value);
+        }
+        else if(commandName == "moveToAngle")
+        {
+          int value = commandValue.toInt();
+          Serial.println("Moving to " + String(value));
+          controller.moveToAngle(value);
+        }
+        else if(commandName == "activateCloseLoop")
+        {
+          controller.enableClosedLoop();
+          Serial.println("Enabling close loop");
+        }
+        else if(commandName == "disableCloseLoop")
+        {
+          controller.disableClosedLoop();
+          Serial.println("disabling close loop");
+        }
+        else if(commandName == "enableDebug")
+        {
+          controller.enableDebug();
+          Serial.println("enabling debug");
+        }
+        else if(commandName == "disableDebug")
+        {
+          controller.disableDebug();
+          Serial.println("disabling debug");
         }
         else {
           // unsupported command
