@@ -63,6 +63,7 @@ class Controller
 
     float _currentAngle = 0;
     float _offsetAngle = 0;
+    float _deltaAngle = 0;
     float _targetAngle = 0;
 
     // stepper variables

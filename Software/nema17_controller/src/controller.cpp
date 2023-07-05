@@ -16,7 +16,12 @@ void Controller::init()
     Wire.begin(SDA_PIN, SCL_PIN);
 
     _encoder->begin();
-    _encoder->setDirection(AS5600_COUNTERCLOCK_WISE);
+    delay(100);
+    Serial.println("Encoder magnet detected : " + String(_encoder->detectMagnet()));
+    Serial.println("Encoder magnet too strong : " + String(_encoder->magnetTooStrong()));
+    Serial.println("Encoder magnet too weak : " + String(_encoder->magnetTooWeak()));
+    
+    _encoder->setDirection(AS5600_CLOCK_WISE);
     setOffsetAngle(getAngle());
     _currentAngle = 0;
     if(!_encoder->isConnected())
@@ -77,11 +82,20 @@ void Controller::moveToAngle(float angle)
         else
         {
             Serial.println("Motor not at angle");
-            _currentAngle = getAngle();
+            // _currentAngle = getAngle();
         }
         // calculate delta for the two sides and check which is smaller
         float deltaAngle = angle - _currentAngle;
+        // Serial.println("Delta angle : " + String(deltaAngle));
+        if(abs(deltaAngle) > 180)
+        {
+            if(deltaAngle > 0)
+                deltaAngle = deltaAngle - 360;
+            else 
+                deltaAngle = deltaAngle + 360;
+        }
         _currentAngle =  _currentAngle + deltaAngle;
+        _deltaAngle = deltaAngle;
         moveAngle(deltaAngle); 
         Serial.println("Closed loop enabled");
     }
@@ -126,6 +140,12 @@ void Controller::setAcceleration(int acceleration)
 
 void Controller::run()
 {
+    // if(_deltaAngle != 0)
+    // {
+    //     moveAngle(_deltaAngle);
+    //     // _deltaAngle = 0;
+    // }
+
     if(_stepper->run() == false)
     {
         // Serial.println("Stepper stopped");
@@ -135,13 +155,14 @@ void Controller::run()
     {
         // Serial.println("Stepper running");
         enableStepper();
+
         // Serial.println("Angle : " + String(getAngle()));
     }
 
     // debug encoder
     if(_debug)
     {
-        if(_lastLoopTime - millis() > 500)
+        if(_lastLoopTime - millis() > 750)
         {
             Serial.println("Angle : " + String(getAngle()));
             // Serial.println("Position : " + String(getPosition()));
@@ -181,7 +202,7 @@ void Controller::disableClosedLoop()
 float Controller::getAngle()
 {
     // translate raw angle to degrees
-    uint16_t rawAngle = _encoder->rawAngle();
+    uint16_t rawAngle = _encoder->readAngle();
     float angle = (rawAngle * 360.0) / 4096.0;
 
     if(_offsetAngle > 0) angle = (angle - _offsetAngle);
@@ -197,7 +218,9 @@ void Controller::setOffsetAngle(float angle)
 
 void Controller::resetEncoder()
 {
-    setOffsetAngle(getAngle());
+    uint16_t rawAngle = _encoder->readAngle();
+    float angle = (rawAngle * 360.0) / 4096.0;
+    setOffsetAngle(angle);
     _currentAngle = 0;
 }
 

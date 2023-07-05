@@ -106,6 +106,11 @@ void processSerialCommands() {
           controller.disableDebug();
           Serial.println("disabling debug");
         }
+        else if(commandName == "resetEncoder")
+        {
+          controller.resetEncoder();
+          Serial.println("resetting encoder");
+        }
         else {
           // unsupported command
         }
