@@ -86,7 +86,7 @@ void processSerialCommands() {
           Serial.println("Moving to " + String(value));
           controller.moveToAngle(value);
         }
-        else if(commandName == "activateCloseLoop")
+        else if(commandName == "enableCloseLoop")
         {
           controller.enableClosedLoop();
           Serial.println("Enabling close loop");
@@ -110,6 +110,16 @@ void processSerialCommands() {
         {
           controller.resetEncoder();
           Serial.println("resetting encoder");
+        }
+        else if(commandName == "setSpeed")
+        {
+          controller.setSpeed(commandValue.toInt());
+          Serial.println("setting speed to " + commandValue);
+        }
+        else if(commandName == "setAccel")
+        {
+          controller.setAcceleration(commandValue.toInt());
+          Serial.println("setting acceleration to " + commandValue);
         }
         else {
           // unsupported command

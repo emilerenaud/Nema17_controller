@@ -21,7 +21,7 @@ void Controller::init()
     Serial.println("Encoder magnet too strong : " + String(_encoder->magnetTooStrong()));
     Serial.println("Encoder magnet too weak : " + String(_encoder->magnetTooWeak()));
     
-    _encoder->setDirection(AS5600_CLOCK_WISE);
+    _encoder->setDirection(AS5600_COUNTERCLOCK_WISE);
     setOffsetAngle(getAngle());
     _currentAngle = 0;
     if(!_encoder->isConnected())
@@ -72,40 +72,7 @@ void Controller::moveAngle(float angle)
 
 void Controller::moveToAngle(float angle)
 {
-    if(_closedLoop)
-    {
-        // check if the motor is at the _currentAngle
-        if(abs(_currentAngle - getAngle()) < 3)
-        {
-            Serial.println("Motor at angle");
-        }
-        else
-        {
-            Serial.println("Motor not at angle");
-            // _currentAngle = getAngle();
-        }
-        // calculate delta for the two sides and check which is smaller
-        float deltaAngle = angle - _currentAngle;
-        // Serial.println("Delta angle : " + String(deltaAngle));
-        if(abs(deltaAngle) > 180)
-        {
-            if(deltaAngle > 0)
-                deltaAngle = deltaAngle - 360;
-            else 
-                deltaAngle = deltaAngle + 360;
-        }
-        _currentAngle =  _currentAngle + deltaAngle;
-        _deltaAngle = deltaAngle;
-        moveAngle(deltaAngle); 
-        Serial.println("Closed loop enabled");
-    }
-    else
-    {
-        // calculate delta
-        float deltaAngle = angle - _currentAngle;
-        moveAngle(deltaAngle); 
-        Serial.println("Closed loop disabled");
-    }
+    _targetAngle = angle;
 }
 
 void Controller::moveStep(long steps)
@@ -140,11 +107,23 @@ void Controller::setAcceleration(int acceleration)
 
 void Controller::run()
 {
-    // if(_deltaAngle != 0)
-    // {
-    //     moveAngle(_deltaAngle);
-    //     // _deltaAngle = 0;
-    // }
+    if(_closedLoop)
+    {
+        if(abs(_targetAngle - getAngle()) > 1)
+        {
+            // Serial.println("Motor not at angle");
+            float deltaAngle = _targetAngle - getAngle();
+            if(abs(deltaAngle) > 180)
+            {
+                if(deltaAngle > 0)
+                    deltaAngle = deltaAngle - 360;
+                else 
+                    deltaAngle = deltaAngle + 360;
+            }
+            _deltaAngle = deltaAngle;
+            moveAngle(_deltaAngle); 
+        }
+    }
 
     if(_stepper->run() == false)
     {
@@ -155,7 +134,7 @@ void Controller::run()
     {
         // Serial.println("Stepper running");
         enableStepper();
-
+        
         // Serial.println("Angle : " + String(getAngle()));
     }
 
@@ -164,12 +143,12 @@ void Controller::run()
     {
         if(_lastLoopTime - millis() > 750)
         {
+            _lastLoopTime = millis();
             Serial.println("Angle : " + String(getAngle()));
             // Serial.println("Position : " + String(getPosition()));
             // Serial.println("Current : " + String(getCurrent()));
             // Serial.println("Voltage : " + String(getVoltage()));
             // Serial.println("Power : " + String(getPower()));
-            _lastLoopTime = millis();
         }
     }
 }
